@@ -3,7 +3,7 @@
 </p>
 
 <h1>On-premises Active Directory Deployed in the Cloud (Azure)</h1>
-This tutorial outlines the implementation of on-premises Active Directory within Azure Virtual Machines.<br />
+This tutorial outlines the deployment of an on-premises-style Active Directory environment hosted on Azure Virtual Machines. The setup includes a Domain Controller (DC-1) running Windows Server 2022 and a Client machine (Client-1) running Windows 10 Pro, both within the same Azure Virtual Network (VNET).<br />
 
 
 <h2>Environments and Technologies Used</h2>
@@ -15,17 +15,16 @@ This tutorial outlines the implementation of on-premises Active Directory within
 
 <h2>Operating Systems Used </h2>
 
-- Windows Server 2022
-- Windows 10 (21H2)
+- Windows Server 2022(DC-1)
+- Windows 10 (21H2)(Client-1)
 
 ## Step 1: Overview
+We will configure and install Active Directory Domain Services (AD DS) on DC-1, promote it as a Domain Controller, and then join Client-1 to the domain. This setup simulates a traditional on-premises AD environment hosted in Azure.
 
-**Configure and install Active Directory services on the designated Domain Controller virtual machine.**
+Open Server Manager on DC-1.
+Click Add roles and features.
+Select Active Directory Domain Services (AD DS) and complete the installation.
 
-1. Install "Active Directory Domain Services" in DC-1  
-   - In the Server Manager dashboard  
-   - Click **Add roles and features**  
-   - Select **Active Directory Domain Services** and finish the installation.  
 
 <img width="798" height="476" alt="Screenshot 2025-09-06 103735" src="https://github.com/user-attachments/assets/5ddd1d7c-f977-4bc9-985c-9a4ff390cfd8"/>
 
@@ -35,18 +34,17 @@ This tutorial outlines the implementation of on-premises Active Directory within
 ## Step 2: Promote DC-1 to Domain Controller
 
 
-2. Click on the flag at the top right of the screen with the warning sign  
-   - Promote DC-1 to Domain Controller
-   - Setup a new foret as "mydomain.com"
-   - Restart and then log back into DC-1 as user: mydomain.com\reggie-admin  
+2. Click the flag notification at the top-right in Server Manager.
+Select Promote this server to a domain controller.
+Create a new forest with the domain name:
+Restart and then log back into DC-1 as user: mydomain.com\reggie-admin  
 
 <img width="798" height="476" alt="Screenshot 2025-09-06 103802" src="https://github.com/user-attachments/assets/f0458eed-f2c0-4039-9548-0e1325a9222b"/>
 
 
 
 
-
-- Run Active Directory Users & Computers shown below.
+Open Active Directory Users & Computers (ADUC) to confirm AD DS is active.
 
 
 
@@ -75,9 +73,10 @@ This tutorial outlines the implementation of on-premises Active Directory within
 
 ## Step 4: Create a Domain Admin user within the domain
 
-
-   - Right click on the OU  _ADMINS and create a new user named Jane Doe.
-   - With the username jane_admin  
+In the _ADMINS OU, create a new user:
+Name: Jane Doe
+Username: jane_admin
+  
 
 <img width="827" height="497" alt="Screenshot 2025-09-06 103920" src="https://github.com/user-attachments/assets/52be3374-5a35-4afd-823c-65ad6d7f6e34" />
 <p>
@@ -87,16 +86,16 @@ This tutorial outlines the implementation of on-premises Active Directory within
 
 ## Step 5: Add jane_admin to the "Domain Admins" Security Group 
 
-
-   - Turn Jane Doe into an admin by right clicking her name > properties
-   - member of and adding her to the "Domain Admins" Security Group
+Right-click jane_admin → Properties → Member Of.
+Add Jane to the Domain Admins security group.
+  
 
 <img width="829" height="495" alt="Screenshot 2025-09-06 104037" src="https://github.com/user-attachments/assets/e911f82c-4922-49ea-a400-afaf42c1e959" />
 
 <p>
 
 
-## Step 6: Log out of DC-1 to log back in as Jane Doe
+## Step 6: Log in as Jane Doe
 
 
    - Log back in as "mydomain.com\jane_admin"
@@ -110,10 +109,10 @@ This tutorial outlines the implementation of on-premises Active Directory within
 
 
 ## Step 7: Login to Client-1 as the original local admin and join it to the domain  (Computer will restart)
-
-   - Right click the start menu > click system > click rename this pc advanced
-   - Under the computer name tab, click on "Change"
-   - Join it to the domain "mydomain.com"
+Log into Client-1 as the local admin.
+Right-click Start Menu → System → Rename this PC (Advanced).
+Under Computer Name, click Change.
+Join it to the domain "mydomain.com"
    
 
 <img width="825" height="552" alt="Screenshot 2025-09-06 105051" src="https://github.com/user-attachments/assets/6bcc6533-ec89-4d80-b10c-b2568baeb5d4" />
@@ -129,8 +128,10 @@ This tutorial outlines the implementation of on-premises Active Directory within
 <p>
 
 ## Step 8: Login to the Domain Controller and verify Client-1 shows up in ADUC
-
-   - Expand mydomain.com then go to "computers" to verify
+On DC-1, open ADUC.
+Expand mydomain.com → Computers.
+Confirm Client-1 appears in the list.
+   
 
 <img width="756" height="533" alt="Screenshot 2025-09-06 105129" src="https://github.com/user-attachments/assets/77b4a2eb-5c15-4ac3-877b-26ffce42a2a7" />
 
@@ -138,7 +139,9 @@ This tutorial outlines the implementation of on-premises Active Directory within
 
 <p>
 
-## Step 9: Create a new OU named "_CLIENTS" and drag Client-1 into there
+## Step 9: Organize Clients into OU
+Create a new OU named _CLIENTS.
+Drag Client-1 into the _CLIENTS OU.
 
 
 <img width="759" height="531" alt="Screenshot 2025-09-06 105212" src="https://github.com/user-attachments/assets/cf818cfe-f34d-4453-a195-b95328514884" />
@@ -189,7 +192,7 @@ This tutorial outlines the implementation of on-premises Active Directory within
 <p>
 
 
-## Step 12: Login as any user
+## Step 12: Test Login with New Users
   
   - Now you can login as any of the users that was created by the script to further verify that the script has worked.
   - Take note of the default password in the script (Password1) for all users.
@@ -205,7 +208,11 @@ As you can see the Powershell script created a user with the username "bid.tuk".
 
 
 
-
+At this point, you have:
+A functioning Active Directory Domain in Azure.
+Multiple OUs for organization.
+Domain Users who can log in to Client-1.
+Bulk user provisioning automated with PowerShell.
 
 
 
