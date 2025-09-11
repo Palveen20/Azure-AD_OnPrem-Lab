@@ -101,8 +101,6 @@ Add Jane to the Domain Admins security group.
    - Log back in as "mydomain.com\jane_admin"
    - Use jane_admin as your admin account from now on
 
-<img width="453" height="557" alt="Screenshot 2025-09-06 104858" src="https://github.com/user-attachments/assets/a2406d9b-e020-47ef-8727-cc6a44ddbd49" />
-
 
 <p>
 
