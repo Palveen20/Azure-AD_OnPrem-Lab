@@ -195,7 +195,6 @@ Drag Client-1 into the _CLIENTS OU.
   - Now you can login as any of the users that was created by the script to further verify that the script has worked.
   - Take note of the default password in the script (Password1) for all users.
 
-<img width="450" height="557" alt="Screenshot 2025-09-06 105619" src="https://github.com/user-attachments/assets/b5f52c67-bba4-4505-b9cc-848b73d31ff9" />
 
 
 
@@ -215,7 +214,7 @@ Bulk user provisioning automated with PowerShell.
 
 
 
-<p>
+</p>
 
 
 
